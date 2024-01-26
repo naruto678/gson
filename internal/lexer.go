@@ -19,6 +19,7 @@ func NewLexer(content string) *Lexer {
                 line : 1, 
         }
         lexer.parseContent()
+        lexer.tokens = append(lexer.tokens, NewToken(lexer.line, nil, EOF))
         for _, token := range lexer.tokens{
                 fmt.Println(token)
         } 
