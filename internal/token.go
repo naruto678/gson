@@ -2,21 +2,20 @@ package internal
 
 import "fmt"
 
-type TokenType rune
-
+type TokenType string
 
 const (
-        LEFT_BRACE TokenType = '{'
-        RIGHT_BRACE TokenType = '}'
-        COMMA = ','
-        SEMI_COLON = ':'
-        LEFT_SQUARE_BRACE = '['
-        RIGHT_SQUARE_BRACE = ']'
-        STRING = ' '
-        NUMBER = ' '
-        EOF = '\r'
-        TRUE = ' '
-        FALSE = ' '
+        LEFT_BRACE TokenType = "{"
+        RIGHT_BRACE TokenType = "}"
+        COMMA = ","
+        SEMI_COLON = ";"
+        LEFT_SQUARE_BRACE = "["
+        RIGHT_SQUARE_BRACE = "]"
+        STRING = "STRING"
+        NUMBER = "NUMBER"
+        EOF = "EOF"
+        TRUE = "TRUE"
+        FALSE = "FALSE"
 )
 
 type Token struct {
@@ -27,7 +26,7 @@ type Token struct {
 
 
 func (t Token) String() string{
-        return fmt.Sprintf("Token[(line = %d, literal = %v , tokenType = %v)]",  t.line, t.literal, t.tokenType)
+        return fmt.Sprintf("Token[(line = %d, tokenType = '%s', literal = %v)]",  t.line, t.tokenType, t.literal)
 }
 
 func NewToken(line int, literal any, tokenType TokenType ) *Token{

@@ -2,6 +2,7 @@ package internal
 
 import (
         "unicode"
+        "fmt"
 )
 
 type Lexer struct{
@@ -18,6 +19,9 @@ func NewLexer(content string) *Lexer {
                 line : 1, 
         }
         lexer.parseContent()
+        for _, token := range lexer.tokens{
+                fmt.Println(token)
+        } 
         return lexer
 } 
 
@@ -29,23 +33,23 @@ func (l *Lexer) parseContent() []*Token{
                 currVal := l.content[l.currPos]
                 switch currVal {
                 case '[': 
-                        l.addToken(NewToken(l.line, currVal, LEFT_SQUARE_BRACE ))
+                        l.addToken(NewToken(l.line, nil, LEFT_SQUARE_BRACE ))
                         l.advance()
                 case ']': 
-                        l.addToken(NewToken(l.line, currVal, RIGHT_SQUARE_BRACE))
+                        l.addToken(NewToken(l.line, nil, RIGHT_SQUARE_BRACE))
                         l.advance()
                 case '{': 
-                        l.addToken(NewToken(l.line, currVal, LEFT_BRACE))
+                        l.addToken(NewToken(l.line, nil, LEFT_BRACE))
                         l.advance()
                 case '}': 
-                        l.addToken(NewToken(l.line, currVal, RIGHT_BRACE))
+                        l.addToken(NewToken(l.line, nil, RIGHT_BRACE))
                         l.advance()
                 case ':': 
-                        l.addToken(NewToken(l.line, currVal, SEMI_COLON))
+                        l.addToken(NewToken(l.line, nil, SEMI_COLON))
                         l.advance()
                 
                 case ',': 
-                        l.addToken(NewToken(l.line, currVal, COMMA))
+                        l.addToken(NewToken(l.line, nil, COMMA))
                         l.advance()
                 case '\n': 
                         l.line++
@@ -61,11 +65,11 @@ func (l *Lexer) parseContent() []*Token{
                         for l.currPos< len(l.content) && l.content[l.currPos] != '"'{
                                 l.advance()
                         }
-                        l.addToken(NewToken(l.line, l.content[startPos:l.currPos-1], STRING))
+                        l.addToken(NewToken(l.line, l.content[startPos:l.currPos], STRING))
                         l.advance()
-                default: 
+                default:
                         if l.isBoolean(){
-                                l.currPos+=4 
+                                continue 
                         } else {
                                 currNum := 0 
                                 for l.currPos < len(l.content) && unicode.IsDigit(rune(currVal))  {
@@ -92,12 +96,14 @@ func (l *Lexer) advance(){
 
 func (l *Lexer) isBoolean() bool {
         if l.content[l.currPos:l.currPos+4] == "true" {
-                l.addToken(NewToken(l.line, "true", TRUE))
+                l.addToken(NewToken(l.line, nil, TRUE))
+                l.currPos+=4
                 return true 
         } 
-        if l.content[l.currPos:l.currPos+4] == "false" {
-                l.addToken(NewToken(l.line, "false", FALSE))
-                return true 
+        if l.content[l.currPos:l.currPos+5] == "false" {
+                l.addToken(NewToken(l.line, nil, FALSE))
+                l.currPos+=5
+                return true
         }
         return false 
 }

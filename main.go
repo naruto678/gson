@@ -3,27 +3,25 @@ package main
 import (
 	"flag"
 	"os"
-        "fmt"
 	"strings"
-        Internal "github.com/naruto678/gson/internal"
+
+	Internal "github.com/naruto678/gson/internal"
 )
 
-
-
 func main() {
-        
-        fileName := flag.String("file", "", "file to parse")
-        flag.Parse()
-        
-        if strings.Trim(*fileName, " ")==""{
-                panic("file name cannot be empty")
-        }
-        
-        if content, err := os.ReadFile(*fileName); err!=nil {
-                lexer := Internal.NewLexer(string(content))
-                fmt.Println(lexer)
-        } else {
-                panic(err)
-        }
+
+	fileName := flag.String("file", "", "file to parse")
+	flag.Parse()
+
+	if strings.Trim(*fileName, " ") == "" {
+		panic("file name cannot be empty you mother fucking cunt")
+	}
+
+	if content, err := os.ReadFile(*fileName); err == nil {
+		_ = Internal.NewLexer(string(content))
+	
+	} else {
+		panic(err)
+	}
 
 }
